@@ -42,9 +42,11 @@ module Griddler
       def remove_addresses_from_bcc(bcc, addresses)
         return bcc unless addresses.present?
         if addresses.is_a?(Array)
-          bcc -= addresses
+          addresses.each do |address|
+            bcc -= Griddler::EmailParser::extract_email_address(address)
+          end
         else
-          bcc.delete(addresses) if bcc.present?
+          bcc.delete(Griddler::EmailParser::extract_email_address(addresses)) if bcc.present?
         end
         bcc
       end
